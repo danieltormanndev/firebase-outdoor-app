@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Outdoors</title>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
+</head>
+
+<body>
+    <h1>Cadastro de Outdoors</h1>
+    <form id="form-cadastro">
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br><br>
+
+        <label for="descricao">Descrição:</label><br>
+        <input type="text" id="descricao" name="descricao"><br><br>
+
+        <label for="localizacao">Localização:</label><br>
+        <input type="text" id="localizacao" name="localizacao"><br><br>
+
+        <label for="cidade">Cidade:</label><br>
+        <input type="text" id="cidade" name="cidade"><br><br>
+
+        <label for="tipo">Tipo:</label><br>
+        <input type="text" id="tipo" name="tipo"><br><br>
+
+        <label for="disponibilidade">Disponibilidade:</label><br>
+        <input type="text" id="disponibilidade" name="disponibilidade"><br><br>
+
+        <label for="proprietario">Proprietário:</label><br>
+        <input type="text" id="proprietario" name="proprietario"><br><br>
+
+        <button type="submit">Salvar</button>
+    </form>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "sua-api-key",
+            authDomain: "seu-auth-domain",
+            projectId: "seu-project-id",
+            storageBucket: "seu-storage-bucket",
+            messagingSenderId: "seu-messaging-sender-id",
+            appId: "seu-app-id"
+        };
+
+        // Inicialize o Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Função que lida com o envio do formulário
+        document.getElementById("form-cadastro").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("nome").value;
+            const descricao = document.getElementById("descricao").value;
+            const localizacao = document.getElementById("localizacao").value;
+            const cidade = document.getElementById("cidade").value;
+            const tipo = document.getElementById("tipo").value;
+            const disponibilidade = document.getElementById("disponibilidade").value;
+            const proprietario = document.getElementById("proprietario").value;
+
+            // Verifique se os dados são válidos
+            if (!nome || !descricao || !localizacao || !cidade || !tipo || !disponibilidade || !proprietario) {
+                alert("Todos os campos devem ser preenchidos!");
+                return;
+            }
+
+            // Adicione os dados no Firestore
+            db.collection("outdoors").add({
+                    Nome: nome,
+                    Descricao: descricao,
+                    Localizacao: localizacao,
+                    Cidade: cidade,
+                    Tipo: tipo,
+                    Disponibilidade: disponibilidade,
+                    Proprietario: proprietario
+                })
+                .then(() => {
+                    alert("Dados salvos com sucesso!");
+                    // Limpar os campos após envio
+                    document.getElementById("form-cadastro").reset();
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar dados: ", error);
+                });
+        });
+    </script>
+</body>
+
+</html>
